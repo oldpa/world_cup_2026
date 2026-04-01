@@ -65,6 +65,10 @@ function normalizeApiBase(rawBase: string | undefined): string {
   if (!rawBase || !rawBase.trim()) return fallback
   const base = rawBase.trim()
   if (base.startsWith('http://') || base.startsWith('https://')) return base
+  const renderInternalHost = base.match(/^([a-z0-9-]+):\d+$/i)
+  if (renderInternalHost) {
+    return `https://${renderInternalHost[1]}.onrender.com`
+  }
   // Render service references can arrive as host:port; make it browser-safe.
   return `https://${base}`
 }

@@ -60,7 +60,16 @@ export type MultiSimulationResult = {
   highlight_best_journey: MatchResult[]
 }
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000'
+function normalizeApiBase(rawBase: string | undefined): string {
+  const fallback = 'http://127.0.0.1:8000'
+  if (!rawBase || !rawBase.trim()) return fallback
+  const base = rawBase.trim()
+  if (base.startsWith('http://') || base.startsWith('https://')) return base
+  // Render service references can arrive as host:port; make it browser-safe.
+  return `https://${base}`
+}
+
+const API_BASE = normalizeApiBase(import.meta.env.VITE_API_BASE)
 
 export async function runSingleSimulation(
   params: SimulationParams,

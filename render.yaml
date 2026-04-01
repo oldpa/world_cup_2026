@@ -20,4 +20,4 @@ services:
         fromService:
           type: web
           name: world-cup-2026-api
-          property: hostport
+          property: url
